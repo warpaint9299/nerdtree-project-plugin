@@ -39,7 +39,7 @@ let g:loaded_nerdtree_project_plugin=1
 
 "Glue code - wiring up s:Project into nerdtree {{{1
 "============================================================
-command! -nargs=1 NERDTreeProjectSave call g:NERDTreeProject.Add(<q-args>, b:NERDTree)
+command! -nargs=1 NERDTreeProjectSave call g:NERDTreeProject.Save(<q-args>)
 command! -nargs=1 -complete=customlist,NERDTreeCompleteProjectNames NERDTreeProjectLoad call g:NERDTreeProject.Open(<q-args>)
 command! -nargs=1 -complete=customlist,NERDTreeCompleteProjectNames NERDTreeProjectRm call g:NERDTreeProject.Remove(<q-args>)
 command! -nargs=? -complete=customlist,NERDTreeCompleteProjectNames NERDTreeProjectLoadFromCWD call g:NERDTreeProject.LoadFromCWD()
@@ -63,6 +63,16 @@ let g:NERDTreeProject = s:Project
 
 "Class Methods {{{2
 "============================================================
+" FUNCTION: Project.Save(name) {{{3
+function s:Project.Save(name) abort
+    silent! NERDTreeFocus
+    if exists('b:NERDTree')
+        call g:NERDTreeProject.Add(a:name, b:NERDTree)
+    else
+        echo "Error: Please run this command after open a NERDTree window."
+    endif
+endfunction
+
 " FUNCTION: Project.Add(name, nerdtree) {{{3
 function! s:Project.Add(name, nerdtree) abort
     for i in s:Project.All()
